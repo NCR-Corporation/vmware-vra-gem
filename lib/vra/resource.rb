@@ -166,7 +166,11 @@ module Vra
       resource_views = @client.http_get("/catalog-service/api/consumer/requests/#{request_id}/resourceViews")
 
       data_zero = JSON.parse(resource_views.body)["content"][0]["data"]["ip_address"]
-      data_one = JSON.parse(resource_views.body)["content"][1]["data"]["ip_address"]
+      if JSON.parse(resource_views.body)["content"][1].nil?
+        data_one = ""
+      else
+        data_one = JSON.parse(resource_views.body)["content"][1]["data"]["ip_address"]    
+      end
 
       print "Waiting For vRA to collect the IP"
       while (data_zero == "" || data_one == "") && (data_zero.nil? || data_one.nil?)
